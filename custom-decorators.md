@@ -151,4 +151,4 @@ async findOne(user) {
 }
 ```
 
-*[Страница на GitHub](https://github.com/SneakBug8/nestjs-docs-ru/blob/master/custom-decorators.md)*
+[*Страница на GitHub*](https://github.com/SneakBug8/nestjs-docs-ru/blob/master/custom-decorators.md)
