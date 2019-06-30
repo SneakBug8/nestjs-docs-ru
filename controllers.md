@@ -491,3 +491,5 @@ export class CatsController {
 Though this approach works, and does in fact allow for more flexibility in some ways by providing full control of the response object (headers manipulation, library-specific features, and so on), it should be used with care. In general, the approach is much less clear and does have some disadvantages. The main disadvantages are that you lose compatibility with Nest features that depend on Nest standard response handling, such as Interceptors and the `@HttpCode()` decorator. Also, your code can become platform-dependent (as underlying libraries may have different APIs on the response object), and harder to test (you'll have to mock the response object, etc.).
 
 As a result, the Nest standard approach should always be preferred when possible.
+
+*[Страница на GitHub](https://github.com/SneakBug8/nestjs-docs-ru/blob/master/controllers.md)*

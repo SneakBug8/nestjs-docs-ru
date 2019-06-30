@@ -280,3 +280,5 @@ throw new UnauthorizedException();
 ```
 
 Any exception thrown by a guard will be handled by the [exceptions layer](/exception-filters) (global exceptions filter and any exceptions filters that are applied to the current context).
+
+*[Страница на GitHub](https://github.com/SneakBug8/nestjs-docs-ru/blob/master/guards.md)*

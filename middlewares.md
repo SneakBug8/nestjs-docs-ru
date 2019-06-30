@@ -223,3 +223,6 @@ const app = await NestFactory.create(ApplicationModule);
 app.use(logger);
 await app.listen(3000);
 ```
+
+
+*[Страница на GitHub](https://github.com/SneakBug8/nestjs-docs-ru/blob/master/middlewares.md)*

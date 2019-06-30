@@ -118,7 +118,7 @@ Every existing adapter (for example, `FastifyAdapter`) is now being served from 
 - `WsAdapter` - `@nestjs/platform-ws`
 - `IoAdapter` - `@nestjs/platform-socket.io`
 
-Also, `FileInterceptor` (and other `multer` related interceptors) are now exported from `@nestjs/platform-express` (because `multer` library is not compatible with `fastify`). 
+Also, `FileInterceptor` (and other `multer` related interceptors) are now exported from `@nestjs/platform-express` (because `multer` library is not compatible with `fastify`).
 
 #### Metadata reflection
 
@@ -152,3 +152,5 @@ All deprecations (from 4 to 5 version) have been finally removed.
 #### TypeScript
 
 Nest 6 supports the latest major release of [TypeScript](https://www.typescriptlang.org/) (3.0.0).
+
+*[Страница на GitHub](https://github.com/SneakBug8/nestjs-docs-ru/blob/master/migration.md)*

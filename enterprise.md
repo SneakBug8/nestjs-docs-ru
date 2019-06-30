@@ -37,3 +37,5 @@ We provide solid kick-off training as well as more advanced ones that help teams
 #### Contact
 
 Let's talk how we can help you become successful with Nest: [support@nestjs.com](mailto:support@nestjs.com)
+
+*[Страница на GitHub](https://github.com/SneakBug8/nestjs-docs-ru/blob/master/enterprise.md)*

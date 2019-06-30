@@ -203,3 +203,5 @@ This is how our directory structure should look now:
 <div class="item">main.ts</div>
 </div>
 </div>
+
+*[Страница на GitHub](https://github.com/SneakBug8/nestjs-docs-ru/blob/master/components.md)*

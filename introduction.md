@@ -35,3 +35,5 @@ $ npm run start
 ```bash
 $ npm i --save @nestjs/core @nestjs/common rxjs reflect-metadata
 ```
+
+*[Страница на GitHub](https://github.com/SneakBug8/nestjs-docs-ru/blob/master/introduction.md)*

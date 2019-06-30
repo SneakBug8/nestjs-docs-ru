@@ -330,3 +330,5 @@ export class TimeoutInterceptor {
 ```
 
 After 5 seconds, request processing will be canceled.
+
+*[Страница на GitHub](https://github.com/SneakBug8/nestjs-docs-ru/blob/master/interceptors.md)*

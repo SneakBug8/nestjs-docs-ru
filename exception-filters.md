@@ -340,3 +340,5 @@ async function bootstrap() {
 }
 bootstrap();
 ```
+
+*[Страница на GitHub](https://github.com/SneakBug8/nestjs-docs-ru/blob/master/exception-filters.md)*

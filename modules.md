@@ -254,3 +254,5 @@ import { User } from './users/entities/user.entity';
 })
 export class ApplicationModule {}
 ```
+
+*[Страница на GitHub](https://github.com/SneakBug8/nestjs-docs-ru/blob/master/modules.md)*

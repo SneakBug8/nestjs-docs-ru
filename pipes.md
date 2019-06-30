@@ -500,3 +500,6 @@ In addition to these, all `class-validator` options (inherited from the `Validat
 </table>
 
 > info **Notice** Find more information about the `class-validator` package in its [repository](https://github.com/typestack/class-validator).
+
+
+*[Страница на GitHub](https://github.com/SneakBug8/nestjs-docs-ru/blob/master/pipes.md)*
