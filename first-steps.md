@@ -1,16 +1,15 @@
 ### First steps
 
-In this set of articles, you'll learn the **core fundamentals** of Nest. To get familiar with the essential building blocks of Nest applications, we'll build a basic CRUD application with features that cover a lot of ground at an introductory level.
+В этом блоке статей вы изучите **главные фундаменты** Nest. Чтобы познакомиться с основными строительными блоками Nest, мы создадим базовое CRUD приложение с набором функций, которые позволят нам расширить знания на начинающем уровне.
 
-#### Language
+### Язык
+Мы любим [TypeScript](http://www.typescriptlang.org/), но больше всего мы любим [Node.js](https://nodejs.org/en/). Именно поэтому Nest совместим с TypeScript и **чистым JavaScript**. Nest использует преимущества последних функций языка, поэтому для использования с vanilla JS, нам понадобится компилятор [Babel](http://babeljs.io/).
 
-We're in love with [TypeScript](http://www.typescriptlang.org/), but above all - we love [Node.js](https://nodejs.org/en/). That's why Nest is compatible with both TypeScript and **pure JavaScript**. Nest takes advantage of the latest language features, so to use it with vanilla JavaScript we need a [Babel](http://babeljs.io/) compiler.
+В наших примерах кода, мы будем использовать TypeScript.
 
-We'll mostly use TypeScript in the examples we provide, but you can always **switch the code snippets** to vanilla JavaScript syntax (simply click to toggle the language button in the upper right hand corner of each snippet).
+### Предварительне требования
 
-#### Prerequisites
-
-Please make sure that [Node.js](https://nodejs.org/) (>= 8.9.0) is installed on your operating system.
+Пожалуйста, убедитесь, что у вас установлен [Node.js](https://nodejs.org/) (>= 8.9.0)
 
 #### Setup
 
