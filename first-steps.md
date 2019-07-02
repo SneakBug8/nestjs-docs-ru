@@ -1,5 +1,3 @@
-### First steps
-
 В этом блоке статей вы изучите **главные фундаменты** Nest. Чтобы познакомиться с основными строительными блоками Nest, мы создадим базовое CRUD приложение с набором функций, которые позволят нам расширить знания на начинающем уровне.
 
 ### Язык
@@ -7,7 +5,7 @@
 
 В наших примерах кода, мы будем использовать TypeScript.
 
-### Предварительне требования
+### Предварительные требования
 
 Пожалуйста, убедитесь, что у вас установлен [Node.js](https://nodejs.org/) (>= 8.9.0)
 
@@ -94,4 +92,4 @@ $ npm run start
 
 This command starts the app with the HTTP server listening on the port defined in the `src/main.ts` file. Once the application is running, open your browser and navigate to `http://localhost:3000/`. You should see the `Hello world!` message.
 
-*[Страница на GitHub](https://github.com/SneakBug8/nestjs-docs-ru/blob/master/first-steps.md)*
+[*Страница на GitHub*](https://github.com/SneakBug8/nestjs-docs-ru/blob/master/first-steps.md)
