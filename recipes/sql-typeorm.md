@@ -39,7 +39,9 @@ export const databaseProviders = [
 ];
 ```
 
-> warning **Hint** Following best practices, we declared the custom provider in the separated file which has a `*.providers.ts` suffix.
+> warning **Warning** Setting `synchronize: true` shouldn't be used in production - otherwise you can lose production data.
+
+> info **Hint** Following best practices, we declared the custom provider in the separated file which has a `*.providers.ts` suffix.
 
 Then, we need to export these providers to make them **accessible** for the rest of the application.
 
@@ -105,7 +107,7 @@ export const photoProviders = [
 ];
 ```
 
-> warning **Notice** In the real-world applications you should avoid **magic strings**. Both `PHOTO_REPOSITORY` and `DATABASE_CONNECTION` should be kept in the separated `constants.ts` file.
+> warning **Warning** In the real-world applications you should avoid **magic strings**. Both `PHOTO_REPOSITORY` and `DATABASE_CONNECTION` should be kept in the separated `constants.ts` file.
 
 Now we can inject the `Repository<Photo>` to the `PhotoService` using the `@Inject()` decorator:
 
@@ -119,11 +121,11 @@ import { Photo } from './photo.entity';
 export class PhotoService {
   constructor(
     @Inject('PHOTO_REPOSITORY')
-    private readonly photoRepository: Repository<Photo>,
+    private photoRepository: Repository<Photo>,
   ) {}
 
   async findAll(): Promise<Photo[]> {
-    return await this.photoRepository.find();
+    return this.photoRepository.find();
   }
 }
 ```
@@ -149,4 +151,4 @@ import { PhotoService } from './photo.service';
 export class PhotoModule {}
 ```
 
-> warning **Hint** Do not forget to import the `PhotoModule` into the root `ApplicationModule`.
+> info **Hint** Do not forget to import the `PhotoModule` into the root `AppModule`.

@@ -50,7 +50,7 @@ export class CatsModule {}
 
 > info **Hint** To create a module using the CLI, simply execute the `$ nest g module cats` command.
 
-Above, we defined the `CatsModule` in the `cats.module.ts` file, and moved everything related to this module into the `cats` directory. The last thing we need to do is import this module into the root module (the `ApplicationModule`, defined in the `app.module.ts` file).
+Above, we defined the `CatsModule` in the `cats.module.ts` file, and moved everything related to this module into the `cats` directory. The last thing we need to do is import this module into the root module (the `AppModule`, defined in the `app.module.ts` file).
 
 ```typescript
 @@filename(app.module)
@@ -60,7 +60,7 @@ import { CatsModule } from './cats/cats.module';
 @Module({
   imports: [CatsModule],
 })
-export class ApplicationModule {}
+export class AppModule {}
 ```
 
 Here is how our directory structure looks now:
@@ -78,9 +78,9 @@ Here is how our directory structure looks now:
       <div class="children">
         <div class="item">cat.interface.ts</div>
       </div>
-      <div class="item">cats.service.ts</div>
       <div class="item">cats.controller.ts</div>
       <div class="item">cats.module.ts</div>
+      <div class="item">cats.service.ts</div>
     </div>
     <div class="item">app.module.ts</div>
     <div class="item">main.ts</div>
@@ -111,6 +111,8 @@ export class CatsModule {}
 
 Now any module that imports the `CatsModule` has access to the `CatsService` and will share the same instance with all other modules that import it as well.
 
+<app-banner-enterprise></app-banner-enterprise>
+
 #### Module re-exporting
 
 As seen above, Modules can export their internal providers. In addition, they can re-export modules that they import. In the example below, the `CommonModule` is both imported into **and** exported from the `CoreModule`, making it available for other modules which import this one.
@@ -138,7 +140,7 @@ import { CatsService } from './cats.service';
   providers: [CatsService],
 })
 export class CatsModule {
-  constructor(private readonly catsService: CatsService) {}
+  constructor(private catsService: CatsService) {}
 }
 @@switch
 import { Module, Dependencies } from '@nestjs/common';
@@ -161,7 +163,9 @@ However, module classes themselves cannot be injected as providers due to [circu
 
 #### Global modules
 
-If you have to import the same set of modules everywhere, it can get tedious. In [Angular](https://angular.io), `providers` are registered in the global scope. Once defined, they're available everywhere. Nest, however, encapsulates providers inside the module scope. You aren't able to use a module's providers elsewhere without first importing them. When you want to provide a set of providers which should be available everywhere out-of-the-box, (e.g., helpers, database connections, etc.) you can make the module **global** with the `@Global()` decorator.
+If you have to import the same set of modules everywhere, it can get tedious. Unlike in Nest, [Angular](https://angular.io) `providers` are registered in the global scope. Once defined, they're available everywhere. Nest, however, encapsulates providers inside the module scope. You aren't able to use a module's providers elsewhere without first importing the encapsulating module.
+
+When you want to provide a set of providers which should be available everywhere out-of-the-box (e.g., helpers, database connections, etc.), make the module **global** with the `@Global()` decorator.
 
 ```typescript
 import { Module, Global } from '@nestjs/common';
@@ -183,7 +187,9 @@ The `@Global()` decorator makes the module global-scoped. Global modules should 
 
 #### Dynamic modules
 
-The Nest module system includes a feature called **dynamic modules**. This feature enables you to easily create customizable modules. Following is an example of such a dynamic module, a `DatabaseModule`:
+The Nest module system includes a powerful feature called **dynamic modules**. This feature enables you to easily create customizable modules that can register and configure providers dynamically. Dynamic modules are covered extensively [here](/fundamentals/dynamic-modules). In this chapter, we'll give a brief overview to complete the introduction to modules.
+
+Following is an example of a dynamic module definition for a `DatabaseModule`:
 
 ```typescript
 @@filename()
@@ -226,9 +232,22 @@ export class DatabaseModule {
 
 > info **Hint** The `forRoot()` method may return a dynamic module either synchronously or asynchronously (i.e., via a `Promise`).
 
-This module defines the `Connection` provider by default, but additionally - depending on the `entities` and `options` objects passed to it - exposes a collection of providers, for example, repositories. Note that the dynamic module **extends** (rather than overrides) the base module metadata. That's how both the statically declared `Connection` provider **and** the dynamically configured repository providers are exported from the module.
+This module defines the `Connection` provider by default (in the `@Module()` decorator metadata), but additionally - depending on the `entities` and `options` objects passed into the `forRoot()` method - exposes a collection of providers, for example, repositories. Note that the properties returned by the dynamic module **extend** (rather than override) the base module metadata defined in the `@Module()` decorator. That's how both the statically declared `Connection` provider **and** the dynamically generated repository providers are exported from the module.
 
-This substantial feature is useful when you need to register and configure providers dynamically. Once defined in this way, the `DatabaseModule` can be imported and configured in the following manner:
+If you want to register a dynamic module in the global scope, set the `global` property to `true`.
+
+```typescript
+{
+  global: true,
+  module: DatabaseModule,
+  providers: providers,
+  exports: providers,
+}
+```
+
+> warning **Warning** As mentioned above, making everything global **is not a good design decision**.
+
+The `DatabaseModule` can be imported and configured in the following manner:
 
 ```typescript
 import { Module } from '@nestjs/common';
@@ -238,7 +257,7 @@ import { User } from './users/entities/user.entity';
 @Module({
   imports: [DatabaseModule.forRoot([User])],
 })
-export class ApplicationModule {}
+export class AppModule {}
 ```
 
 If you want to in turn re-export a dynamic module, you can omit the `forRoot()` method call in the exports array:
@@ -252,7 +271,7 @@ import { User } from './users/entities/user.entity';
   imports: [DatabaseModule.forRoot([User])],
   exports: [DatabaseModule],
 })
-export class ApplicationModule {}
+export class AppModule {}
 ```
 
-*[Страница на GitHub](https://github.com/SneakBug8/nestjs-docs-ru/blob/master/modules.md)*
+The [Dynamic modules](/fundamentals/dynamic-modules) chapter covers this topic in greater detail, and includes a [working example](https://github.com/nestjs/nest/tree/master/sample/25-dynamic-modules).

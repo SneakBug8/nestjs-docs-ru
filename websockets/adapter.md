@@ -39,11 +39,11 @@ Once the package is installed, we can create a `RedisIoAdapter` class.
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import * as redisIoAdapter from 'socket.io-redis';
 
-const redisAdapter = redisIoAdapter({ host: 'localhost', port: 6379 });
-
 export class RedisIoAdapter extends IoAdapter {
   createIOServer(port: number, options?: any): any {
     const server = super.createIOServer(port, options);
+    const redisAdapter = redisIoAdapter({ host: 'localhost', port: 6379 });
+    
     server.adapter(redisAdapter);
     return server;
   }
@@ -53,7 +53,7 @@ export class RedisIoAdapter extends IoAdapter {
 Afterward, simply switch to your newly created Redis adapter.
 
 ```typescript
-const app = await NestFactory.create(ApplicationModule);
+const app = await NestFactory.create(AppModule);
 app.useWebSocketAdapter(new RedisIoAdapter(app));
 ```
 
@@ -70,7 +70,7 @@ $ npm i --save @nestjs/platform-ws
 Once the package is installed, we can switch an adapter:
 
 ```typescript
-const app = await NestFactory.create(ApplicationModule);
+const app = await NestFactory.create(AppModule);
 app.useWebSocketAdapter(new WsAdapter(app));
 ```
 
@@ -83,12 +83,13 @@ For demonstration purposes, we are going to integrate the [ws](https://github.co
 ```typescript
 @@filename(ws-adapter)
 import * as WebSocket from 'ws';
-import { WebSocketAdapter, MessageMappingProperties, INestApplicationContext } from '@nestjs/common';
-import { Observable, fromEvent, empty } from 'rxjs';
-import { mergeMap, filter, tap } from 'rxjs/operators';
+import { WebSocketAdapter, INestApplicationContext } from '@nestjs/common';
+import { MessageMappingProperties } from '@nestjs/websockets';
+import { Observable, fromEvent, EMPTY } from 'rxjs';
+import { mergeMap, filter } from 'rxjs/operators';
 
 export class WsAdapter implements WebSocketAdapter {
-  constructor(private readonly app: INestApplicationContext) {}
+  constructor(private app: INestApplicationContext) {}
 
   create(port: number, options: any = {}): any {
     return new ws.Server({ port, ...options });
@@ -121,7 +122,7 @@ export class WsAdapter implements WebSocketAdapter {
       handler => handler.message === message.event,
     );
     if (!messageHandler) {
-      return empty;
+      return EMPTY;
     }
     return process(messageHandler.callback(message.data));
   }
@@ -138,7 +139,7 @@ Then, we can set up a custom adapter using `useWebSocketAdapter()` method:
 
 ```typescript
 @@filename(main)
-const app = await NestFactory.create(ApplicationModule);
+const app = await NestFactory.create(AppModule);
 app.useWebSocketAdapter(new WsAdapter(app));
 ```
 

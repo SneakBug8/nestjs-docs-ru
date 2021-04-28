@@ -1,20 +1,26 @@
 ### File upload
 
-In order to handle file uploading, Nest makes use of [multer](https://github.com/expressjs/multer) middleware. This middleware is fully configurable and you can adjust its behavior to your application requirements.
+To handle file uploading, Nest provides a built-in module based on the [multer](https://github.com/expressjs/multer) middleware package for Express. Multer handles data posted in the `multipart/form-data` format, which is primarily used for uploading files via an HTTP `POST` request. This module is fully configurable and you can adjust its behavior to your application requirements.
 
-Multer is middleware for handling `multipart/form-data`, which is primarily used for uploading files.
+> warning **Warning** Multer cannot process data which is not in the supported multipart format (`multipart/form-data`). Also, note that this package is not compatible with the `FastifyAdapter`.
 
-> warning **Warning** Multer will not process any form which is not multipart (`multipart/form-data`). Besides, this package won't work with the `FastifyAdapter`.
+For better type safety, let's install Multer typings package:
+
+```shell
+$ npm i -D @types/multer
+```
+
+With this package installed, we can now use the `Express.Multer.File` type (you can import this type as follows: `import {{ '{' }} Express {{ '}' }} from 'express'`).
 
 #### Basic example
 
-When we want to upload a single file, we simply tie `FileInterceptor()` to the handler, and then, pull outs `file` from the `request` using `@UploadedFile()` decorator.
+To upload a single file, simply tie the `FileInterceptor()` interceptor to the route handler and extract `file` from the `request` using the `@UploadedFile()` decorator.
 
 ```typescript
 @@filename()
 @Post('upload')
 @UseInterceptors(FileInterceptor('file'))
-uploadFile(@UploadedFile() file) {
+uploadFile(@UploadedFile() file: Express.Multer.File) {
   console.log(file);
 }
 @@switch
@@ -26,19 +32,30 @@ uploadFile(file) {
 }
 ```
 
-> info **Hint** `FileInterceptor()` decorator is exported from `@nestjs/platform-express` package while `@UploadedFile()` from `@nestjs/common`.
+> info **Hint** The `FileInterceptor()` decorator is exported from the `@nestjs/platform-express` package. The `@UploadedFile()` decorator is exported from `@nestjs/common`.
 
-The `FileInterceptor()` takes two arguments, a `fieldName` (points to field from HTML form that holds a file) and optional `options` object. These `MulterOptions` are equivalent to those passed into multer constructor (more details [here](https://github.com/expressjs/multer#multeropts))
+The `FileInterceptor()` decorator takes two arguments:
+
+- `fieldName`: string that supplies the name of the field from the HTML form that holds a file
+- `options`: optional object of type `MulterOptions`. This is the same object used by the multer constructor (more details [here](https://github.com/expressjs/multer#multeropts)).
+
+> warning **Warning** `FileInterceptor()` may not be compatible with third party cloud providers like Google Firebase or others.
 
 #### Array of files
 
-In order to upload an array of files, we use `FilesInterceptor()`. This interceptor takes three arguments. A `fieldName` (that remains the same), `maxCount` which is a maximum number of files that can be uploaded at the same time, and optional `MulterOptions` object. Additionally, to pick files from `request` object, we use `@UploadedFiles()` decorator
+To upload an array of files (identified with a single field name), use the `FilesInterceptor()` decorator (note the plural **Files** in the decorator name). This decorator takes three arguments:
+
+- `fieldName`: as described above
+- `maxCount`: optional number defining the maximum number of files to accept
+- `options`: optional `MulterOptions` object, as described above
+
+When using `FilesInterceptor()`, extract files from the `request` with the `@UploadedFiles()` decorator.
 
 ```typescript
 @@filename()
 @Post('upload')
 @UseInterceptors(FilesInterceptor('files'))
-uploadFile(@UploadedFiles() files) {
+uploadFile(@UploadedFiles() files: Express.Multer.File) {
   console.log(files);
 }
 @@switch
@@ -50,11 +67,16 @@ uploadFile(files) {
 }
 ```
 
-> info **Hint** `FilesInterceptor()` decorator is exported from `@nestjs/platform-express` package while `@UploadedFiles()` from `@nestjs/common`.
+> info **Hint** The `FilesInterceptor()` decorator is exported from the `@nestjs/platform-express` package. The `@UploadedFiles()` decorator is exported from `@nestjs/common`.
 
 #### Multiple files
 
-To upload multiple fields (all with different keys), we use `FileFieldsInterceptor()` decorator.
+To upload multiple fields (all with different field name keys), use the `FileFieldsInterceptor()` decorator. This decorator takes two arguments:
+
+- `uploadedFields`: an array of objects, where each object specifies a required `name` property with a string value specifying a field name, as described above, and an optional `maxCount` property, as described above
+- `options`: optional `MulterOptions` object, as described above
+
+When using `FileFieldsInterceptor()`, extract files from the `request` with the `@UploadedFiles()` decorator.
 
 ```typescript
 @@filename()
@@ -73,6 +95,28 @@ uploadFile(@UploadedFiles() files) {
   { name: 'avatar', maxCount: 1 },
   { name: 'background', maxCount: 1 },
 ]))
+uploadFile(files) {
+  console.log(files);
+}
+```
+
+#### Any files
+
+To upload all fields with arbitrary field name keys, use the `AnyFilesInterceptor()` decorator. This decorator can accept an optional `options` object as described above.
+
+When using `AnyFilesInterceptor()`, extract files from the `request` with the `@UploadedFiles()` decorator.
+
+```typescript
+@@filename()
+@Post('upload')
+@UseInterceptors(AnyFilesInterceptor())
+uploadFile(@UploadedFiles() files: Express.Multer.File) {
+  console.log(files);
+}
+@@switch
+@Post('upload')
+@Bind(UploadedFiles())
+@UseInterceptors(AnyFilesInterceptor())
 uploadFile(files) {
   console.log(files);
 }
@@ -80,29 +124,31 @@ uploadFile(files) {
 
 #### Default options
 
-To customize [multer](https://github.com/expressjs/multer) behavior, you can register the `MulterModule`. We support all options listed [here](https://github.com/expressjs/multer#multeropts).
+You can specify multer options in the file interceptors as described above. To set default options, you can call the static `register()` method when you import the `MulterModule`, passing in supported options. You can use all options listed [here](https://github.com/expressjs/multer#multeropts).
 
 ```typescript
 MulterModule.register({
-  dest: '/upload',
+  dest: './upload',
 });
 ```
 
+> info **Hint** The `MulterModule` class is exported from the `@nestjs/platform-express` package.
+
 #### Async configuration
 
-Quite often you might want to asynchronously pass your module options instead of passing them beforehand. In such case, use `registerAsync()` method, that provides a couple of various ways to deal with async data.
+When you need to set `MulterModule` options asynchronously instead of statically, use the `registerAsync()` method. As with most dynamic modules, Nest provides several techniques to deal with async configuration.
 
-First possible approach is to use a factory function:
+One technique is to use a factory function:
 
 ```typescript
 MulterModule.registerAsync({
   useFactory: () => ({
-    dest: '/upload',
+    dest: './upload',
   }),
 });
 ```
 
-Obviously, our factory behaves like every other one (might be `async` and is able to inject dependencies through `inject`).
+Like other [factory providers](https://docs.nestjs.com/fundamentals/custom-providers#factory-providers-usefactory), our factory function can be `async` and can inject dependencies through `inject`.
 
 ```typescript
 MulterModule.registerAsync({
@@ -114,7 +160,7 @@ MulterModule.registerAsync({
 });
 ```
 
-Alternatively, you are able to use class instead of a factory.
+Alternatively, you can configure the `MulterModule` using a class instead of a factory, as shown below:
 
 ```typescript
 MulterModule.registerAsync({
@@ -122,20 +168,20 @@ MulterModule.registerAsync({
 });
 ```
 
-Above construction will instantiate `MulterConfigService` inside `MulterModule` and will leverage it to create options object. The `MulterConfigService` has to implement `MulterOptionsFactory` interface.
+The construction above instantiates `MulterConfigService` inside `MulterModule`, using it to create the required options object. Note that in this example, the `MulterConfigService` has to implement the `MulterOptionsFactory` interface, as shown below. The `MulterModule` will call the `createMulterOptions()` method on the instantiated object of the supplied class.
 
 ```typescript
 @Injectable()
 class MulterConfigService implements MulterOptionsFactory {
   createMulterOptions(): MulterModuleOptions {
     return {
-      dest: '/upload',
+      dest: './upload',
     };
   }
 }
 ```
 
-In order to prevent the creation of `MulterConfigService` inside `MulterModule` and use a provider imported from a different module, you can use the `useExisting` syntax.
+If you want to reuse an existing options provider instead of creating a private copy inside the `MulterModule`, use the `useExisting` syntax.
 
 ```typescript
 MulterModule.registerAsync({
@@ -144,4 +190,6 @@ MulterModule.registerAsync({
 });
 ```
 
-It works the same as `useClass` with one critical difference - `MulterModule` will lookup imported modules to reuse already created `ConfigService`, instead of instantiating it on its own.
+#### Example
+
+A working example is available [here](https://github.com/nestjs/nest/tree/master/sample/29-file-upload).

@@ -11,5 +11,3 @@ Nest doesn't have a large company that sits behind and is continuously paying fo
 - or reach me directly: [mail@kamilmysliwiec.com](mailto:mail@kamilmysliwiec.com)
 
 If you fell in love with Nest, or you run a business which is using Nest, consider sponsoring its development to ensure that the project which your product relies on is **actively maintained** and improved. Also, your support could help me to work more on content that benefits whole Nest community, writing either educational blog posts or recording videos.
-
-*[Страница на GitHub](https://github.com/SneakBug8/nestjs-docs-ru/blob/master/support.md)*

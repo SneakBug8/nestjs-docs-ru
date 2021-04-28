@@ -1,3 +1,5 @@
+### Первые шаги
+
 В этом блоке статей вы изучите **главные фундаменты** Nest. Чтобы познакомиться с основными строительными блоками Nest, мы создадим базовое CRUD приложение с набором функций, которые позволят нам расширить знания на начинающем уровне.
 
 ### Язык
@@ -23,19 +25,23 @@ The `project` directory will be created, node modules and a few other boilerplat
 <div class="file-tree">
   <div class="item">src</div>
   <div class="children">
+    <div class="item">app.controller.spec.ts</div>
     <div class="item">app.controller.ts</div>
     <div class="item">app.module.ts</div>
+    <div class="item">app.service.ts</div>
     <div class="item">main.ts</div>
   </div>
 </div>
 
 Here's a brief overview of those core files:
 
-|                     |                                                                                                                     |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `app.controller.ts` | Basic controller sample with a single route.                                                                        |
-| `app.module.ts`     | The root module of the application.                                                                                 |
-| `main.ts`           | The entry file of the application which uses the core function `NestFactory` to create a Nest application instance. |
+|                          |                                                                                                                     |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------- |
+| `app.controller.ts`      | A basic controller with a single route.                                                                             |
+| `app.controller.spec.ts` | The unit tests for the controller.                                                                                  |
+| `app.module.ts`          | The root module of the application.                                                                                 |
+| `app.service.ts`         | A basic service with a single method.                                                                               |
+| `main.ts`                | The entry file of the application which uses the core function `NestFactory` to create a Nest application instance. |
 
 The `main.ts` includes an async function, which will **bootstrap** our application:
 
@@ -43,19 +49,19 @@ The `main.ts` includes an async function, which will **bootstrap** our applicati
 @@filename(main)
 
 import { NestFactory } from '@nestjs/core';
-import { ApplicationModule } from './app.module';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(ApplicationModule);
+  const app = await NestFactory.create(AppModule);
   await app.listen(3000);
 }
 bootstrap();
 @@switch
 import { NestFactory } from '@nestjs/core';
-import { ApplicationModule } from './app.module';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(ApplicationModule);
+  const app = await NestFactory.create(AppModule);
   await app.listen(3000);
 }
 bootstrap();
@@ -64,6 +70,8 @@ bootstrap();
 To create a Nest application instance, we use the core `NestFactory` class. `NestFactory` exposes a few static methods that allow creating an application instance. The `create()` method returns an application object, which fulfills the `INestApplication` interface. This object provides a set of methods which are described in the coming chapters. In the `main.ts` example above, we simply start up our HTTP listener, which lets the application await inbound HTTP requests.
 
 Note that a project scaffolded with the Nest CLI creates an initial project structure that encourages developers to follow the convention of keeping each module in its own dedicated directory.
+
+<app-banner-courses></app-banner-courses>
 
 #### Platform
 
@@ -79,7 +87,7 @@ Whichever platform is used, it exposes its own application interface. These are 
 When you pass a type to the `NestFactory.create()` method, as in the example below, the `app` object will have methods available exclusively for that specific platform. Note, however, you don't **need** to specify a type **unless** you actually want to access the underlying platform API.
 
 ```typescript
-const app = await NestFactory.create<NestExpressApplication>(ApplicationModule);
+const app = await NestFactory.create<NestExpressApplication>(AppModule);
 ```
 
 #### Running the application
@@ -90,6 +98,4 @@ Once the installation process is complete, you can run the following command at 
 $ npm run start
 ```
 
-This command starts the app with the HTTP server listening on the port defined in the `src/main.ts` file. Once the application is running, open your browser and navigate to `http://localhost:3000/`. You should see the `Hello world!` message.
-
-[*Страница на GitHub*](https://github.com/SneakBug8/nestjs-docs-ru/blob/master/first-steps.md)
+This command starts the app with the HTTP server listening on the port defined in the `src/main.ts` file. Once the application is running, open your browser and navigate to `http://localhost:3000/`. You should see the `Hello World!` message.
